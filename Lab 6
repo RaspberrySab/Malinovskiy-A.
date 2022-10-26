@@ -1,0 +1,89 @@
+#include <iostream>
+#include <locale>
+#include <ctime>
+
+using namespace std;
+
+int soz(int**& a, int n)
+{
+	a = new int* [n];
+	for (int i = 0; i < n; i++)
+		a[i] = new int[n];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+
+			cin >> a[i][j];
+	return **a;
+}
+int maximus(int**& a, int n, int& ini, int& inj)
+{
+	int max = a[0][0];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (a[i][j] > max)
+			{
+				max = a[i][j];
+				ini = i;
+				inj = j;
+			}
+	return max;
+}
+void del(int**& a, int n)
+{
+	for (int i = 0; i < n; i++)
+		delete[] a[i];
+	delete[] a;
+}
+int StolbStrDel(int**& a, int n, int max, int ini, int inj)
+{
+	int** a2;
+	soz(a2, (n - 1));
+	int i2 = 0, j2 = 0;
+
+	for (int i = 0; i < n; i++)
+		if (i != ini)
+			for (int j = 0; j < n; j++)
+				if (j != inj)
+				{
+					a2[i2][j2] = a[i][j];
+					j2++;
+					if (j2 == (n - 1))
+		{
+						i2++;
+						j2 = 0;
+					}
+				}
+	del(a, n);
+	a = a2;
+	return**a;
+}
+
+void vyv(int**& a, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+			cout << a[i][j] << " ";
+		cout << '\n';
+	}
+}
+
+int main()
+{
+	setlocale(LC_CTYPE, "");
+	srand(time(0));
+	int** a, n;
+	cout << "Введите размер вашей матрицы(число должно быть нечетным)" << '\n';
+	cin >> n;
+	soz(a, n);
+ cout << "Исходная матрица" << '\n';
+	vyv(a, n);
+
+	int ini = 0, inj = 0;
+	int max = maximus(a, n, ini, inj);
+	cout << endl << "Максимальное число, которое надо удалить -> " << max << endl;
+	StolbStrDel(a, n, max, ini, inj);
+	cout << "Полученная матрица" << '\n';
+	vyv(a, (n - 1));
+	del(a, (n - 1));
+}
