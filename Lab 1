@@ -1,0 +1,17 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main()
+{
+	int a=1, b=2,n=10;
+	float x,y,h;
+	x=a; h=float(b-a)/n;	 
+	for(int i=0; i<n;i++)
+	{
+		y=pow(2,abs(x))*log10(abs(sin(pow(x,4)))) 
+		- pow(cos(sqrt(4-x*x)),2);
+		cout<<"x="<<x<<" y="<<y<<endl;
+		x+=h;
+	}
+	
+}
