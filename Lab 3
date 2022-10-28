@@ -1,57 +1,78 @@
+#include <fstream>
 #include <iostream>
-#define N 20
-#include <cmath>
+#include <string>
+#define n 5
 using namespace std;
+int output_matrix(int m,double a[n][n])
+{
+	for (int i=0;i<n;i++)	
+	{	for (int j=0;j<m;j++)
+			cout << a[i][j]<<" ";
+		cout<<endl;	
+	}		
+}
+int solution(double a[n][n])
+{	int num[n]; int m=0;
+	for (int j=0;j<n;j++)
+	{
+		bool fl=false;
+		for (int i=0;i<n;i++)
+			if (a[i][j]<0)	
+				fl=true;
+		if (fl) num[j]=1;
+		else num[j]=0;
+		m+=num[j];
+	}
+	double X[n][n]; int k=0;
+	for (int j=0;j<n;j++)
+		if (num[j]==1)
+		{
+			for (int i=0;i<n;i++)
+				X[i][k]=a[i][j];
+			k++;
+		}
+	output_matrix(m,X);
+			
+}
+int input_matrix()
+{	
+	double a[n][n];
+	for (int i=0;i<n;i++)
+		for (int j=0;j<n;j++)
+			cin >> a[i][j]; 
+	output_matrix(n,a);
+	solution(a);
+}
+
+int input_file(string name_in)
+{	
+	ifstream fin(name_in.c_str());
+	double a[n][n];
+	for (int i=0;i<n;i++)
+		for (int j=0;j<n;j++)
+			fin >> a[i][j]; 
+	fin.close();	
+	output_matrix(n,a);
+	solution(a);
+}
+string enter_name()
+{
+	string name_in;
+	cout <<"Enter name file IN\n";
+	cin>>name_in;
+	return name_in;
+}
 
 int main()
-{
-	double X[N] = { 1,-1,12,8,1,2,9,-5,7,1,2,-2,5,6,7,-5,2,14,4,14 };
-	for (int i = 0; i < N; i++)
-	{
-		cout << X[i] << " ";
-	}
-	cout << endl;
-
-	int m = X[0]; int b = X[0];
-	int mI = 0; int bI = 0;
-	for (int i = 0; i < N; i++)
-	{
-		if (m > X[i])
-		{
-			m = X[i];
-			mI = i + 1;
-		}
-		if (b < X[i])
-		{
-			b = X[i];
-			bI = i + 1;
-
-		}
-	}
-	cout << "min=" << m << " " << mI << endl;
-	cout << "max=" << b << " " << bI << endl;
-	double average;
-	average = (double)(m + b) / 2;
-	cout << average << endl;
-	for (int i = 0; i < N; i++)
-	{
-		if ((mI != i) && (X[i] == m))
-		{
-			X[i] = (double)average;
-		}
-	
-		if ((bI != i) && (X[i] == b))
-		{
-			X[i] = (double)average;
-		}
-		
-		cout << X[i] << " ";
-	}
-	
-	SredeArif = (double)(b+m)/2;
-cout<<"srednee arifmeticheskoe="<<SredneArif;
-cout<<endl;
-
+{ 	int key;
+	cout<<"Choose enter matrix file or keyboard\n";
+	cout<<"file - 0 keyboard-1 \n";
+	cin>>key;	
+	if (key==0) 
+		input_file(enter_name());
+	else input_matrix();
+	return 0;
 }
+
 
 
