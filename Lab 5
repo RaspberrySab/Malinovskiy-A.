@@ -1,0 +1,27 @@
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+int main()
+{ 	unsigned short n,mask1,mask2,ml,st,c=1,mx=0;
+	cin>>n;
+	mask1=0x1;mask2=0x2;
+	for(int i=0;i<sizeof(n)*8;i++)
+ 	{
+ 		ml=n&mask1;
+ 		st=(n&mask2)>>1;
+ 		if (ml!=st)
+ 			{	c++;
+ 				mx=max(mx,c);
+ 			}
+ 		else c=1;
+ 		n=n>>1;
+	}
+	cout<<mx;
+	return 0;
+}
+
+
+
+
