@@ -1,0 +1,56 @@
+#include <iostream>
+#include <locale>
+
+using namespace std;
+
+
+struct Abitur 
+{
+	int id, rus, math, info, dop;
+};
+
+struct BD_Abi 
+{
+	int kol;
+	Abitur* a;
+};
+
+Abitur newss(int id, int rus, int math, int info, int dop)
+{
+	Abitur s;
+	s.id = id;
+	s.rus = rus;
+	s.math = math;
+	s.info = info;
+	s.dop = dop;
+	return s;
+}
+
+void Out(Abitur s) 
+{
+	cout << "Номер студента: " << s.id << endl << "Баллы:" << endl << "\tРусский : " << s.rus << endl;
+	cout << "\tМатематика: " << s.math << endl << "\tИнформатика: " << s.info << endl << "\tДостижения: " << s.dop << endl << endl;
+}
+
+int main() 
+{
+	setlocale(LC_CTYPE, "rus");
+	srand(time(0));
+	int id, rus, math, info, dop;
+	int n;
+	cout << "Введите кол - во данных: ";
+	cin >> n;
+	BD_Abi b;
+	b.kol = n;
+	b.a = new Abitur[n];
+	for (int i = 0; i < b.kol; i++) 
+	{
+		cout << "Введите данные о студенте " << i << "-ом/ем" << endl;
+		cin >> id >> rus >> math >> info >> dop;
+	
+		b.a[i] = newss(id, rus, math, info, dop);
+	}
+	for (int i = 0; i < b.kol; i++)
+		Out(b.a[i]);
+	delete[] b.a;
+}
