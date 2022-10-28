@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+int recursia(int n,int m)
+{	if ((n==0)||(m==0)) return 0;
+	if (n%10==m%10) return recursia(n/10,m/10)+1;
+	return recursia(n/10,m/10);
+}
+int iterat(int m,int n)
+{	
+	int c=0;
+	while ((n!=0)&&(m!=0))
+	{
+		if (n%10==m%10)
+			c++;
+		n/=10;
+		m/=10;
+	}
+	return c;	
+}
+
+int input()
+{	int n,m;
+	cin>>m>>n;
+	cout<<"RECURSIA="<<recursia(m,n)<<endl;
+	cout<<"ITERATION="<<iterat(m,n)<<endl;
+	return 0;
+}
+int main()
+{
+	input();	
+	return 0;
+}
+
+
+
+
