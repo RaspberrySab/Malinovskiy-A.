@@ -1,0 +1,160 @@
+#include <iostream>
+#include <locale>
+#include <fstream>
+
+using namespace std;
+
+struct Abitur
+{
+	int id, rus, math, info, dop, sum;
+};
+struct S_D
+{
+	Abitur a;
+	struct S_D* next,* pred;
+};
+
+Abitur newss(int id, int rus, int math, int info, int dop)
+{
+	Abitur s;
+	s.id = id;
+	s.rus = rus;
+	s.math = math;
+	s.info = info;
+	s.dop = dop;
+	s.sum = rus + math + info + dop;
+	return s;
+}
+S_D* newEvent(Abitur newInfo)
+{
+	S_D* news;
+	news = new S_D;
+	news->a = newInfo;
+	news->next = NULL;
+	news->pred = NULL;
+	return news;
+}
+void addToEnd(S_D*& tail, S_D* n)
+{
+	tail->next = n;
+	n->pred = tail;
+	tail = n;
+}
+void deleteFirst(S_D*& head)
+{
+	S_D* t;
+	t = head;
+	head = head->next;
+	if (head != NULL)
+	{
+		head->pred = NULL;
+	}
+	delete t;
+}
+void outList(S_D* c)
+{
+	while (c != NULL)
+	{
+		cout << "Номер студента: " << c->a.id << endl << "Баллы:" << endl << "\tРусский : " << c->a.rus << endl;
+		cout << "\tМатематика: " << c->a.math << endl << "\tИнформатика: " << c->a.info << endl << "\tДостижения: " << c->a.dop << endl;
+		cout << "Сумма: " << c->a.sum << endl << endl;
+		c = c->next;
+	}
+	cout << "List is end" << endl;
+}
+void deleteP(S_D* p, S_D*& head, S_D*& tail)
+{
+	S_D* a1, * a3;
+	a3 = p->next;
+	a1 = p->pred;
+	if (a1 != NULL)
+	{
+		a1->next = p->next;
+		if (a3 != NULL)
+		{
+			a3->pred = p->pred;
+			delete p;
+		}
+		else
+		{
+			tail = a1;
+		}
+	}
+	else
+	{
+		a3->pred = NULL;
+		head = a3;
+		delete p;
+	}
+}
+S_D* MAX(S_D* head)
+{
+	S_D* max = head;
+	while (head != NULL)
+	{
+		if (head->a.sum > max->a.sum)
+			max = head;
+		head = head->next;
+	}
+	return max;
+}
+int main()
+{
+	setlocale(LC_CTYPE, "RUS");
+	int id, rus, math, info, dop;
+	int n;
+	string p;
+	ifstream fin;
+	cout << "Введите название файла для чтения данных: ";
+	cin >> p;
+	fin.open(p);
+	fin >> n;
+	Abitur a;
+	S_D* head = NULL;
+	S_D* curr;
+	fin >> id;
+	fin >> rus;
+	fin >> math;
+	fin >> info;
+	fin >> dop;
+	a = newss(id, rus, math, info, dop);
+	curr = newEvent(a);
+	head = curr;
+	S_D* tail = head;
+	for (int i = 1; i < n; i++)
+	{
+		fin >> id;
+		fin >> rus;
+		fin >> math;
+		fin >> info;
+		fin >> dop;
+		a = newss(id, rus, math, info, dop);
+		curr = newEvent(a);
+		addToEnd(tail, curr);
+	}
+	fin.close();
+	outList(head);
+
+	
+	S_D* max = MAX(head);
+	
+	S_D* head1 = NULL;
+	curr = newEvent(max->a);
+	head1 = curr;
+	S_D* tail1 = head1;
+	deleteP(max, head, tail);
+	for (int i = 0; i < 9; i++)
+	{
+		max = MAX(head);
+		curr = newEvent(max->a);
+		addToEnd(tail1, curr);
+		deleteP(max, head, tail);
+	}
+
+	while (head != NULL)
+		deleteFirst(head);
+	cout << endl << "ГОТОВЫЙ СПИСОК 10 ЛУЧШИХ АБИТУРИЕНТОВ" << endl;
+	outList(head1);
+	while (head1 != NULL)
+		deleteFirst(head1);
+}
